@@ -1,0 +1,10 @@
+digraph Paging {
+  graph [rankdir=LR, bgcolor="white", pad=0.3, label="Paging and Address Translation", labelloc=t, fontsize=20, fontname="Arial Bold"];
+  node [shape=record, style=filled, fontname="Arial", fontsize=11, color="#1f5f8b", fillcolor="#eaf3f9"];
+  edge [fontname="Arial", fontsize=9, color="#117a75", penwidth=1.6];
+  logical [label="Logical address|Page number|Offset"];
+  table [label="Page table|P0 → Frame 2|P1 → Frame 0|P2 → Frame 3", fillcolor="#fff4d8", color="#d28a08"];
+  physical [label="Physical memory|Frame 0: Certificate|Frame 1: Free|Frame 2: Login|Frame 3: Grievance", fillcolor="#e8f5f3", color="#117a75"];
+  logical -> table [label="lookup"];
+  table -> physical [label="frame + offset"];
+}

@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A student project demonstrating operating-system resource management for municipal citizen services.">
+  <title>Smart Citizen Services Portal - OS Simulator</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#dashboard" aria-label="Smart Citizen Services home">
+      <span class="brand-mark">SC</span>
+      <span><strong>Smart Citizen Services</strong><small>Operating System Resource Simulator</small></span>
+    </a>
+    <div class="student-chip">Ishika Agarwal · CSE (AIML)</div>
+  </header>
+
+  <nav class="main-nav" aria-label="Main navigation">
+    <button class="nav-button active" data-view="dashboard">Dashboard</button>
+    <button class="nav-button" data-view="portal">Citizen Portal</button>
+    <button class="nav-button" data-view="scheduling">CPU Scheduling</button>
+    <button class="nav-button" data-view="concurrency">Synchronization</button>
+    <button class="nav-button" data-view="deadlock">Deadlock</button>
+    <button class="nav-button" data-view="memory">Memory</button>
+    <button class="nav-button" data-view="disk">Disk</button>
+    <button class="nav-button" data-view="monitor">Monitor</button>
+  </nav>
+
+  <main id="app" class="app-shell" tabindex="-1"></main>
+
+  <footer>
+    Academic prototype · Sample data only · ERP ID: 0251CSML282
+  </footer>
+
+  <template id="dashboard-template">
+    <section class="page-heading">
+      <div><span class="eyebrow">PROJECT CONTROL CENTRE</span><h1>Municipal service overview</h1></div>
+      <button class="secondary-button" id="reset-demo">Reset sample data</button>
+    </section>
+    <section class="metrics-grid" id="dashboard-metrics"></section>
+    <section class="two-column">
+      <article class="panel">
+        <div class="panel-heading"><div><span class="eyebrow">LIVE QUEUE</span><h2>Recent service requests</h2></div><span class="status-pill">Simulated</span></div>
+        <div class="table-wrap"><table><thead><tr><th>Request</th><th>Service</th><th>Priority</th><th>Status</th></tr></thead><tbody id="recent-requests"></tbody></table></div>
+      </article>
+      <article class="panel architecture-card">
+        <div class="panel-heading"><div><span class="eyebrow">FRAMEWORK</span><h2>How the portal scales</h2></div></div>
+        <div class="mini-flow" aria-label="Portal framework flow">
+          <div>Citizen requests</div><span>→</span><div>Request queue</div><span>→</span><div>OS scheduler</div><span>→</span><div>Service workers</div>
+        </div>
+        <p>The portal converts each request into a process. Scheduling shares CPU time, synchronization protects shared records, and memory and disk policies reduce delays.</p>
+        <button class="link-button" data-open-view="scheduling">Open the OS simulator →</button>
+      </article>
+    </section>
+  </template>
+
+  <template id="portal-template">
+    <section class="page-heading">
+      <div><span class="eyebrow">CITIZEN PORTAL</span><h1>Submit and track municipal requests</h1><p>Use sample information only. Records stay in this browser.</p></div>
+    </section>
+    <section class="portal-grid">
+      <article class="panel">
+        <h2>New service request</h2>
+        <form id="request-form" class="form-grid">
+          <label>Citizen name<input id="citizen-name" required maxlength="50" placeholder="Example: Asha Sharma"></label>
+          <label>Mobile number<input id="citizen-mobile" required inputmode="numeric" pattern="[0-9]{10}" maxlength="10" placeholder="10-digit number"></label>
+          <label>Service<select id="service-type"><option>Permit</option><option>Certificate</option><option>Grievance</option></select></label>
+          <label>Priority<select id="request-priority"><option value="3">Normal</option><option value="2">Important</option><option value="1">Urgent</option></select></label>
+          <label class="full-width">Description<textarea id="request-description" required maxlength="180" rows="3" placeholder="Write a short description"></textarea></label>
+          <button class="primary-button full-width" type="submit">Submit request</button>
+        </form>
+        <div id="request-message" class="message" aria-live="polite"></div>
+      </article>
+      <article class="panel">
+        <h2>Track request</h2>
+        <div class="inline-form"><label class="grow">Request ID<input id="track-id" placeholder="Example: CSR-1001"></label><button class="secondary-button" id="track-button">Track</button></div>
+        <div id="track-result" class="track-result empty-state">Enter a request ID to check its status.</div>
+        <hr>
+        <h2>Demo login</h2>
+        <form id="login-form" class="form-grid compact">
+          <label>Email<input id="login-email" type="email" required placeholder="citizen@example.com"></label>
+          <label>Password<input id="login-password" type="password" required minlength="4" placeholder="Minimum 4 characters"></label>
+          <button class="secondary-button full-width" type="submit">Login / Register locally</button>
+        </form>
+        <div id="login-message" class="message" aria-live="polite"></div>
+      </article>
+    </section>
+    <article class="panel">
+      <div class="panel-heading"><div><span class="eyebrow">ADMIN VIEW</span><h2>Request management</h2></div><button class="secondary-button" id="advance-status">Process next request</button></div>
+      <div class="table-wrap"><table><thead><tr><th>ID</th><th>Citizen</th><th>Service</th><th>Priority</th><th>Status</th><th>Created</th></tr></thead><tbody id="admin-requests"></tbody></table></div>
+    </article>
+  </template>
+
+  <template id="scheduling-template">
+    <section class="page-heading"><div><span class="eyebrow">MODULE 2</span><h1>CPU scheduling simulator</h1><p>Citizen requests are represented as processes competing for CPU time.</p></div></section>
+    <section class="lab-layout">
+      <article class="panel controls-panel">
+        <h2>Process data</h2>
+        <label>One process per line: ID, arrival, burst, priority, queue
+          <textarea id="process-input" rows="8">P1,0,5,2,high
+P2,1,8,4,normal
+P3,2,3,1,high
+P4,3,4,1,normal
+P5,5,7,5,background</textarea>
+        </label>
+        <div class="form-grid compact">
+          <label>Algorithm<select id="schedule-algorithm"><option value="FCFS">FCFS</option><option value="SJF">SJF</option><option value="SRTF">SRTF</option><option value="PRIORITY">Priority</option><option value="RR" selected>Round Robin</option><option value="MLQ">Multilevel Queue</option><option value="MLFQ">Multilevel Feedback Queue</option></select></label>
+          <label>Time quantum<input id="time-quantum" type="number" min="1" max="10" value="3"></label>
+        </div>
+        <button class="primary-button" id="run-scheduling">Run scheduling</button>
+        <p class="help-text">Smaller priority number means higher priority.</p>
+      </article>
+      <article class="panel results-panel">
+        <div class="panel-heading"><div><span class="eyebrow">RESULT</span><h2 id="schedule-title">Round Robin</h2></div><span class="status-pill" id="throughput-pill">Ready</span></div>
+        <div id="gantt-chart" class="gantt-chart"></div>
+        <div class="metrics-grid small" id="schedule-metrics"></div>
+        <div class="table-wrap"><table><thead><tr><th>Process</th><th>Completion</th><th>Turnaround</th><th>Waiting</th><th>Response</th></tr></thead><tbody id="schedule-table"></tbody></table></div>
+      </article>
+    </section>
+  </template>
+
+  <template id="concurrency-template">
+    <section class="page-heading"><div><span class="eyebrow">MODULE 3</span><h1>Concurrency and synchronization</h1><p>A bounded queue connects citizens who produce requests with officers who process them.</p></div></section>
+    <section class="two-column">
+      <article class="panel">
+        <h2>Producer–Consumer demonstration</h2>
+        <div class="queue-visual" id="queue-visual"></div>
+        <div class="button-row"><button class="primary-button" id="produce-request">Produce request</button><button class="secondary-button" id="consume-request">Consume request</button><button class="secondary-button" id="auto-concurrency">Run complete demo</button></div>
+        <p class="help-text">A counting semaphore limits the queue to five requests. A mutex allows only one update at a time.</p>
+      </article>
+      <article class="panel">
+        <div class="panel-heading"><div><span class="eyebrow">EVENT LOG</span><h2>Semaphore and mutex activity</h2></div><span class="status-pill" id="lock-state">Mutex free</span></div>
+        <ol class="event-log" id="concurrency-log"></ol>
+      </article>
+    </section>
+    <article class="panel comparison-panel">
+      <h2>Classical problems in this portal</h2>
+      <div class="comparison-grid"><div><strong>Producer–Consumer</strong><span>Citizens submit; officers process.</span></div><div><strong>Readers–Writers</strong><span>Citizens read status; officer updates it.</span></div><div><strong>Dining Philosophers</strong><span>Services share limited database connections.</span></div><div><strong>Sleeping Barber</strong><span>Requests wait while service counters are busy.</span></div></div>
+    </article>
+  </template>
+
+  <template id="deadlock-template">
+    <section class="page-heading"><div><span class="eyebrow">MODULE 3</span><h1>Deadlock and Banker’s Algorithm</h1><p>Check whether available resources can satisfy all municipal processes safely.</p></div></section>
+    <section class="lab-layout">
+      <article class="panel controls-panel">
+        <h2>Banker input</h2>
+        <label>Allocation matrix<textarea id="allocation-input" rows="6">0 1 0
+2 0 0
+3 0 2
+2 1 1
+0 0 2</textarea></label>
+        <label>Maximum matrix<textarea id="maximum-input" rows="6">7 5 3
+3 2 2
+9 0 2
+2 2 2
+4 3 3</textarea></label>
+        <label>Available resources<input id="available-input" value="3 3 2"></label>
+        <button class="primary-button" id="run-banker">Check safe state</button>
+      </article>
+      <article class="panel results-panel">
+        <div class="panel-heading"><div><span class="eyebrow">SAFE-STATE TEST</span><h2 id="banker-status">Waiting for input</h2></div></div>
+        <div id="safe-sequence" class="sequence-strip"></div>
+        <div class="table-wrap"><table><thead id="banker-head"></thead><tbody id="banker-table"></tbody></table></div>
+        <div class="callout"><strong>Recommended prevention:</strong> use a fixed lock order, short timeouts and rollback unfinished database transactions.</div>
+      </article>
+    </section>
+  </template>
+
+  <template id="memory-template">
+    <section class="page-heading"><div><span class="eyebrow">MODULE 4</span><h1>Page-replacement simulator</h1><p>Compare how four algorithms place virtual-memory pages into limited frames.</p></div></section>
+    <section class="lab-layout">
+      <article class="panel controls-panel">
+        <h2>Reference data</h2>
+        <label>Page reference string<input id="page-reference" value="7,0,1,2,0,3,0,4,2,3,0,3,2"></label>
+        <label>Number of frames<input id="frame-count" type="number" min="2" max="8" value="3"></label>
+        <label>Algorithm<select id="memory-algorithm"><option>FIFO</option><option>LRU</option><option>Optimal</option><option>LFU</option></select></label>
+        <button class="primary-button" id="run-memory">Run page replacement</button>
+      </article>
+      <article class="panel results-panel">
+        <div class="panel-heading"><div><span class="eyebrow">RESULT</span><h2 id="memory-title">FIFO</h2></div><span class="status-pill" id="fault-pill">Ready</span></div>
+        <div class="metrics-grid small" id="memory-metrics"></div>
+        <div class="table-wrap wide-table"><table><thead id="memory-head"></thead><tbody id="memory-table"></tbody></table></div>
+      </article>
+    </section>
+  </template>
+
+  <template id="disk-template">
+    <section class="page-heading"><div><span class="eyebrow">MODULE 4</span><h1>Disk-scheduling simulator</h1><p>Calculate the disk-head route used to fetch citizen documents and service records.</p></div></section>
+    <section class="lab-layout">
+      <article class="panel controls-panel">
+        <h2>Disk request data</h2>
+        <label>Request queue<input id="disk-queue" value="98,183,37,122,14,124,65,67"></label>
+        <div class="form-grid compact"><label>Initial head<input id="disk-head" type="number" min="0" value="53"></label><label>Maximum cylinder<input id="disk-max" type="number" min="1" value="199"></label></div>
+        <label>Algorithm<select id="disk-algorithm"><option>FCFS</option><option>SSTF</option><option>SCAN</option><option>C-SCAN</option><option>LOOK</option></select></label>
+        <button class="primary-button" id="run-disk">Run disk scheduling</button>
+      </article>
+      <article class="panel results-panel">
+        <div class="panel-heading"><div><span class="eyebrow">HEAD MOVEMENT</span><h2 id="disk-title">FCFS</h2></div><span class="status-pill" id="movement-pill">Ready</span></div>
+        <div id="disk-path" class="disk-path"></div>
+        <div class="chart-area"><svg id="disk-chart" viewBox="0 0 760 220" role="img" aria-label="Disk head movement chart"></svg></div>
+      </article>
+    </section>
+  </template>
+
+  <template id="monitor-template">
+    <section class="page-heading"><div><span class="eyebrow">MODULE 1 + 4</span><h1>System-health monitor</h1><p>The dashboard estimate represents the project workload. Use the supplied Linux script for actual computer measurements.</p></div><button class="secondary-button" id="refresh-monitor">Refresh values</button></section>
+    <section class="metrics-grid" id="monitor-metrics"></section>
+    <section class="two-column">
+      <article class="panel"><h2>Service worker status</h2><div id="worker-list" class="worker-list"></div></article>
+      <article class="panel"><h2>Resource-management policy</h2><ul class="policy-list"><li>Urgent grievances receive high priority.</li><li>Normal requests use Round Robin for fairness.</li><li>Backups run in the background queue.</li><li>Semaphores limit database connections.</li><li>Monitoring warns the administrator before overload.</li></ul></article>
+    </section>
+  </template>
+
+  <script src="algorithms.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+digraph Virtualization {
+  graph [rankdir=TB, bgcolor="white", pad=0.3, label="Scalable Virtualization Architecture", labelloc=t, fontsize=20, fontname="Arial Bold"];
+  node [shape=box, style="rounded,filled", fontname="Arial", fontsize=11, color="#1f5f8b", fillcolor="#eaf3f9"];
+  edge [color="#117a75", penwidth=1.6];
+  traffic [label="Citizen traffic"];
+  load [label="Load balancer", fillcolor="#e8f5f3", color="#117a75"];
+  vm1 [label="VM 1\nPortal + API"];
+  vm2 [label="VM 2\nPortal + API"];
+  vm3 [label="VM 3\nBackground jobs"];
+  hypervisor [label="Type 1 Hypervisor\nCPU, memory and I/O allocation", fillcolor="#fff4d8", color="#d28a08"];
+  hardware [label="Physical servers\nCPU · RAM · SSD · optional GPU", fillcolor="#f4f6f8", color="#65788a"];
+  traffic -> load;
+  load -> vm1;
+  load -> vm2;
+  load -> vm3;
+  vm1 -> hypervisor;
+  vm2 -> hypervisor;
+  vm3 -> hypervisor;
+  hypervisor -> hardware;
+}

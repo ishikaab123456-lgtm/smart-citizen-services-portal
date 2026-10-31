@@ -1,0 +1,13 @@
+digraph ResourceGraph {
+  graph [rankdir=LR, bgcolor="white", pad=0.35, label="Resource Allocation Graph - Possible Deadlock", labelloc=t, fontsize=20, fontname="Arial Bold"];
+  node [fontname="Arial", fontsize=11];
+  edge [color="#b13f3a", penwidth=1.7, arrowsize=0.75];
+  p1 [label="P1\nCertificate service", shape=circle, style=filled, fillcolor="#eaf3f9", color="#1f5f8b"];
+  p2 [label="P2\nPayment service", shape=circle, style=filled, fillcolor="#eaf3f9", color="#1f5f8b"];
+  r1 [label="R1\nDatabase lock", shape=box, style=filled, fillcolor="#fff4d8", color="#d28a08"];
+  r2 [label="R2\nDocument file", shape=box, style=filled, fillcolor="#fff4d8", color="#d28a08"];
+  r1 -> p1 [label=" allocated"];
+  p1 -> r2 [label=" requests"];
+  r2 -> p2 [label=" allocated"];
+  p2 -> r1 [label=" requests"];
+}

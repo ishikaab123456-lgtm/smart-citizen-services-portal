@@ -1,0 +1,9 @@
+{
+  "name": "smart-citizen-os-portal",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Operating System Resource Management Simulator for Smart Citizen Services",
+  "scripts": {
+    "test": "node tests/run_tests.js && node tests/static_validation.js"
+  }
+}

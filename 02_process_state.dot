@@ -1,0 +1,16 @@
+digraph ProcessState {
+  graph [rankdir=LR, bgcolor="white", pad=0.3, label="Process State Model for a Citizen Request", labelloc=t, fontsize=20, fontname="Arial Bold"];
+  node [shape=ellipse, style=filled, fontname="Arial", fontsize=11, color="#1f5f8b", fillcolor="#eaf3f9"];
+  edge [fontname="Arial", fontsize=9, color="#117a75", penwidth=1.5];
+  new [label="New"];
+  ready [label="Ready"];
+  running [label="Running", fillcolor="#e8f5f3", color="#117a75"];
+  waiting [label="Waiting"];
+  terminated [label="Terminated"];
+  new -> ready [label="admitted"];
+  ready -> running [label="scheduler dispatch"];
+  running -> ready [label="time quantum ends"];
+  running -> waiting [label="wait for DB / file"];
+  waiting -> ready [label="I/O completed"];
+  running -> terminated [label="service completed"];
+}

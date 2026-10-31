@@ -1,0 +1,8 @@
+Reference string: 7,0,1,2,0,3,0,4,2,3,0,3,2
+Number of frames: 3
+
+Expected page faults:
+FIFO    = 10
+LRU     = 9
+Optimal = 7
+LFU     = 8

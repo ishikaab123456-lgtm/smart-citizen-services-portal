@@ -1,0 +1,10 @@
+digraph LinuxArchitecture {
+  graph [rankdir=TB, bgcolor="white", pad=0.3, label="Linux Architecture Used in the Project", labelloc=t, fontsize=20, fontname="Arial Bold"];
+  node [shape=box, style="rounded,filled", fontname="Arial", fontsize=11, color="#1f5f8b", fillcolor="#eaf3f9", width=5.2];
+  edge [color="#117a75", penwidth=1.5];
+  apps [label="User applications\nCitizen portal · Scheduling simulator · Bash scripts"];
+  shell [label="Shell and system libraries\nBash · standard commands · API calls", fillcolor="#e8f5f3", color="#117a75"];
+  kernel [label="Linux kernel\nProcess scheduler · memory manager · VFS · device drivers", fillcolor="#fff4d8", color="#d28a08"];
+  hardware [label="Hardware\nCPU · main memory · storage · network devices", fillcolor="#f4f6f8", color="#65788a"];
+  apps -> shell -> kernel -> hardware;
+}

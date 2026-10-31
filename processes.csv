@@ -1,0 +1,6 @@
+process_id,service,arrival_time,burst_time,priority,queue
+P1,Login and OTP,0,5,2,high
+P2,Certificate generation,1,8,4,normal
+P3,Grievance submission,2,3,1,high
+P4,Payment confirmation,3,4,1,normal
+P5,Database backup,5,7,5,background

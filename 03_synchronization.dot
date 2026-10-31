@@ -1,0 +1,13 @@
+digraph Synchronization {
+  graph [rankdir=LR, bgcolor="white", pad=0.3, label="Producer-Consumer Synchronization", labelloc=t, fontsize=20, fontname="Arial Bold"];
+  node [shape=box, style="rounded,filled", fontname="Arial", fontsize=11, color="#1f5f8b", fillcolor="#eaf3f9"];
+  edge [fontname="Arial", fontsize=9, color="#117a75", penwidth=1.6];
+  producer [label="Citizen portal\nProducer"];
+  empty [label="wait(empty)\nFree slot available", fillcolor="#fff4d8", color="#d28a08"];
+  mutex1 [label="wait(mutex)\nEnter critical section", fillcolor="#e8f5f3", color="#117a75"];
+  buffer [label="Bounded request queue\nMaximum 5 requests", shape=record, fillcolor="#ffffff"];
+  mutex2 [label="signal(mutex)\nLeave critical section", fillcolor="#e8f5f3", color="#117a75"];
+  full [label="signal(full)\nRequest available", fillcolor="#fff4d8", color="#d28a08"];
+  consumer [label="Municipal officer\nConsumer"];
+  producer -> empty -> mutex1 -> buffer -> mutex2 -> full -> consumer;
+}

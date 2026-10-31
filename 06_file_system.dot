@@ -1,0 +1,16 @@
+digraph FileSystem {
+  graph [rankdir=TB, bgcolor="white", pad=0.3, label="Citizen Portal File-System Structure", labelloc=t, fontsize=20, fontname="Arial Bold"];
+  node [shape=folder, style=filled, fontname="Arial", fontsize=11, color="#1f5f8b", fillcolor="#eaf3f9"];
+  edge [color="#117a75", penwidth=1.5];
+  root [label="/citizen_service_data", fillcolor="#e8f5f3", color="#117a75"];
+  permits [label="permits/"];
+  certs [label="certificates/"];
+  grievances [label="grievances/"];
+  logs [label="logs/"];
+  backups [label="backups/"];
+  root -> permits;
+  root -> certs;
+  root -> grievances;
+  root -> logs;
+  root -> backups;
+}

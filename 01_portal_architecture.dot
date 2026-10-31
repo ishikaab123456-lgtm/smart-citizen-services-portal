@@ -1,0 +1,22 @@
+digraph PortalArchitecture {
+  graph [rankdir=TB, bgcolor="white", pad=0.3, nodesep=0.35, ranksep=0.5, label="Smart Citizen Services Portal - OS Framework", labelloc=t, fontsize=20, fontname="Arial Bold"];
+  node [shape=box, style="rounded,filled", fontname="Arial", fontsize=11, color="#1f5f8b", fillcolor="#eaf3f9", margin="0.16,0.10"];
+  edge [color="#117a75", penwidth=1.8, arrowsize=0.7];
+  citizens [label="Citizens\nWeb browser"];
+  gateway [label="Request gateway\nValidation and queue"];
+  scheduler [label="OS scheduler\nPriority + Round Robin", fillcolor="#e8f5f3", color="#117a75"];
+  permit [label="Permit\nworker process"];
+  certificate [label="Certificate\nworker process"];
+  grievance [label="Grievance\nworker process"];
+  sync [label="Semaphore + mutex\nSynchronization", fillcolor="#fff4d8", color="#d28a08"];
+  database [label="Citizen database\nand document files"];
+  monitor [label="System monitor\nand automatic backup"];
+  citizens -> gateway -> scheduler;
+  scheduler -> permit;
+  scheduler -> certificate;
+  scheduler -> grievance;
+  permit -> sync;
+  certificate -> sync;
+  grievance -> sync;
+  sync -> database -> monitor;
+}

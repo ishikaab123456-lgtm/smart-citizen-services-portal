@@ -1,0 +1,11 @@
+Initial head: 53
+Disk range: 0 to 199
+Direction: upward
+Request queue: 98,183,37,122,14,124,65,67
+
+Expected total head movement:
+FCFS   = 640 cylinders
+SSTF   = 236 cylinders
+SCAN   = 331 cylinders
+C-SCAN = 382 cylinders
+LOOK   = 299 cylinders
